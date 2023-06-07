@@ -12,6 +12,8 @@ class Przeslij extends React.Component {
       FormVisible: false,
       Form2Visible: false,
       Form3Visible: false,
+      formCount: 0,
+      submitted: false
     };
   }
 
@@ -39,16 +41,67 @@ class Przeslij extends React.Component {
       if (name === 'edu') {
         this.setState({ eduChecked: false, formVisible: false });
       } else if (name === 'edu2') {
-        this.setState({ edu2Checked: false, formVisible: false });
+        this.setState({ edu2Checked: false, form2Visible: false });
       } else if (name === 'edu3') {
         this.setState({ edu3Checked: false, form3Visible: false });
       }
     }
   };
- 
+
+  handleFormCountChange = (event) => {
+    const count = parseInt(event.target.value, 10);
+    this.setState({ formCount: count });
+  };
+
+  renderForms = () => {
+    const { formCount } = this.state;
+    const forms = [];
+
+    for (let i = 1; i <= formCount; i++) {
+      forms.push(
+        <div className={`wyksztalcenie-${i}`}>
+          <p className='p-wyksztalcenie'>Formularz  {i}</p>
+          <label for='firma-nazwa' className='label-firma-nazwa'>Nazwa firmy</label>
+          <input type="text" className='firma-nazwa' name='firma-nazwa' />
+          <label for='firma-stan' className='label-firma-stan'>Stanowisko</label>
+          <input type="text" className='firma-stan' name="firma-stan" />
+          <label for='firma-dataroz' className='label-firma-dataroz'>Data rozpoczęcia</label>
+          <input type="text" className='firma-dataroz' name='firma-dataroz' />
+          <label for='firma-datauko' className='label-firma-datauko'>Data ukończenia</label>
+          <input type="text" className="firma-datauko" name='firma-datauko' />
+          <br />
+        </div>
+      );
+    }
+
+    return forms;
+  };
+
+  handlePowrotClick = () => {
+    window.location.href = '../../App.js';
+  };
+
+  handleNoweClick = () => {
+    this.setState({ submitted: false });
+  };
+
+  handleFormSubmit = (event) => {
+    event.preventDefault();
+    this.setState({ submitted: true });
+  };
 
   render() {
-    const { fileUploaded, eduChecked, edu2Checked, edu3Checked, formVisible, form2Visible, form3Visible } = this.state;
+    const { fileUploaded, eduChecked, edu2Checked, edu3Checked, formVisible, form2Visible, form3Visible, submitted } = this.state;
+    
+    if (submitted) {
+      return (
+        <div className='przeslij4'>
+          <p className='dzieki'>Dziekujemy za przesłanie CV!</p>
+        <button className='powrot2' onClick={this.handlePowrotClick}>Powrót do strony głównej</button>
+        <button className='nowe' onClick={this.handleNoweClick}>Prześlij nowe CV</button>
+        </div>
+      );
+    }
 
     return (
       <div className='przeslij3'>
@@ -78,10 +131,10 @@ class Przeslij extends React.Component {
               />
               <label for='sex' className='label-sex'>Płeć</label>
               <select name="sex" id="sex" className='sex'>
-              <option value="" selected disabled hidden>Wybierz płeć</option>
-                <option value="1">Mężczyzna</option>
-                <option value="2">Kobieta</option>
-                <option value="3">Inna</option>
+              <option value="" selected defaultValue disabled hidden>Wybierz płeć</option>
+                <option value="2">Mężczyzna</option>
+                <option value="1">Kobieta</option>
+                <option value="4">Inna</option>
               </select>
               <label for="date" className='label-date'>Data urodzenia</label>
               <input type="date" name="date" id="date" className='date' />
@@ -117,8 +170,51 @@ class Przeslij extends React.Component {
                 <input type="text" className='datauko' name="datauko"></input>
                 </div>
               )}
+
+{form2Visible && (
+                <div className='div-srednia'>
+                  <p className='p-srednia'>Szkoła średnia</p>
+                <label for="nazwa2" className='label-nazwa2'>Nazwa</label>
+                <input type="text" className='nazwa2' name="nazwa2"></input>
+                <label for="kierunek2" className='label-kierunek2'>Kierunek</label>
+                <input type="text" className='kierunek2' name="kierunek2"></input>
+                <label for="dataroz2" className='label-dataroz2'>Data rozpoczęcia</label>
+                <input type="text" className='dataroz2' name="dataroz2"></input>
+                <label for="datauko2" className='label-datauko2'>Data ukończenia</label>
+                <input type="text" className='datauko2' name="datauko2"></input>
+                </div>
+              )}
+
+{form3Visible && (
+                <div className='div-podstawa'>
+                  <p className='p-podstawa'>Szkoła podstawowa</p>
+                <label for="nazwa3" className='label-nazwa3'>Nazwa</label>
+                <input type="text" className='nazwa3' name="nazwa3"></input>
+                <label for="dataroz3" className='label-dataroz3'>Data rozpoczęcia</label>
+                <input type="text" className='dataroz3' name="dataroz3"></input>
+                <label for="datauko3" className='label-datauko3'>Data ukończenia</label>
+                <input type="text" className='datauko3' name="datauko3"></input>
+                </div>
+              )}
+
+              <label for="wyksztal" className='label-wyksztal'>Doświadczenie zawodowe</label>
+              <input type="number" className='wyksztal' name="wyksztal" onChange={this.handleFormCountChange} min="0" max="5" placeholder='Wpisz liczbe formularzy do wypełnienia (max 5)'/>
+
+              {this.renderForms()}
+
+              <label for="dodatk" className='label-dodatk'>Dodatkowe umiejętności</label>
+              <textarea className='dodatk' rows="15" cols="45"/>
+              <div className='div-submit'>
+              <input type="submit" className='submit' value="Prześlij CV" onClick={this.handleFormSubmit}/>
+              </div>
+              <div className='div-reset'>
+              <input type="reset" className='reset' value="Wyczyść" />
+              </div>
             </form>
           </div>
+        </div>
+        <div className='div-powrot powrot-fixed'>
+        <button className='powrot' onClick={this.handlePowrotClick}>Powrót do strony głównej</button>
         </div>
       </div>
     );

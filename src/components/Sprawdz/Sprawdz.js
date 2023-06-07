@@ -10,7 +10,8 @@ class Sprawdz extends React.Component {
 
   render() {
     return (
-      <div>Siema</div>
+      <div>WORK IN PROGRESS!!
+      </div>
     );
   }
 }
