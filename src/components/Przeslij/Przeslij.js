@@ -78,7 +78,7 @@ class Przeslij extends React.Component {
   };
 
   handlePowrotClick = () => {
-    window.location.href = '../../App.js';
+    window.location.href = 'https://cv2-gno2.onrender.com';
   };
 
   handleNoweClick = () => {
